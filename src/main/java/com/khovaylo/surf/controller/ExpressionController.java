@@ -3,12 +3,11 @@ package com.khovaylo.surf.controller;
 import com.khovaylo.surf.dto.ExpressionDto;
 import com.khovaylo.surf.dto.LookForBetweenTwoDatesDto;
 import com.khovaylo.surf.dto.converter.Converter;
+import com.khovaylo.surf.exception.NotFoundException;
 import com.khovaylo.surf.exception.OperationIsNotPossibleException;
 import com.khovaylo.surf.model.Expression;
-import com.khovaylo.surf.service.Calculator;
-import com.khovaylo.surf.service.CreateService;
-import com.khovaylo.surf.service.GetListService;
-import com.khovaylo.surf.service.SpecialServiceExpression;
+import com.khovaylo.surf.model.User;
+import com.khovaylo.surf.service.*;
 import com.khovaylo.surf.service.util.Calculation;
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -49,6 +48,8 @@ public class ExpressionController {
 
     CreateService<Expression> expressionCreateService;
 
+    GetService<Long, User> userGetService;
+
     @GetMapping("/list")
     public ResponseEntity<List<ExpressionDto>> getAll() {
         List<ExpressionDto> dtoList = expressionGetListService.getAll().stream()
@@ -76,38 +77,58 @@ public class ExpressionController {
         }
     }
 
-    @GetMapping("/sum")
-    public ResponseEntity<Double> sum(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2) {
+    @GetMapping("{user_id}/sum")
+    public ResponseEntity<Double> sum(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
-            return new ResponseEntity<>(calculator.sum(val1, val2), HttpStatus.OK);
-        } catch (ArithmeticException ex) {
+            User user = userGetService.get(user_id);
+            String expression = val1 + "+" + val2;
+            Double result = calculator.sum(val1, val2);
+            Expression model = new Expression(null, expression, result, null, user);
+            expressionCreateService.create(model);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ArithmeticException | NotFoundException ex) {
             throw new OperationIsNotPossibleException(ex.getMessage());
         }
     }
 
-    @GetMapping("/diff")
-    public ResponseEntity<Double> diff(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2) {
+    @GetMapping("{user_id}/diff")
+    public ResponseEntity<Double> diff(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
-            return new ResponseEntity<>(calculator.diff(val1, val2), HttpStatus.OK);
-        } catch (ArithmeticException ex) {
+            User user = userGetService.get(user_id);
+            String expression = val1 + "-" + val2;
+            Double result = calculator.diff(val1, val2);
+            Expression model = new Expression(null, expression, result, null, user);
+            expressionCreateService.create(model);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ArithmeticException | NotFoundException ex) {
             throw new OperationIsNotPossibleException(ex.getMessage());
         }
     }
 
-    @GetMapping("/mul")
-    public ResponseEntity<Double> mul(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2) {
+    @GetMapping("{user_id}/mul")
+    public ResponseEntity<Double> mul(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
-            return new ResponseEntity<>(calculator.mul(val1, val2), HttpStatus.OK);
-        } catch (ArithmeticException ex) {
+            User user = userGetService.get(user_id);
+            String expression = val1 + "*" + val2;
+            Double result = calculator.mul(val1, val2);
+            Expression model = new Expression(null, expression, result, null, user);
+            expressionCreateService.create(model);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ArithmeticException | NotFoundException ex) {
             throw new OperationIsNotPossibleException(ex.getMessage());
         }
     }
 
-    @GetMapping("/div")
-    public ResponseEntity<Double> div(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2) {
+    @GetMapping("{user_id}/div")
+    public ResponseEntity<Double> div(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
-            return new ResponseEntity<>(calculator.div(val1, val2), HttpStatus.OK);
-        } catch (ArithmeticException ex) {
+            User user = userGetService.get(user_id);
+            String expression = val1 + "/" + val2;
+            Double result = calculator.div(val1, val2);
+            Expression model = new Expression(null, expression, result, null, user);
+            expressionCreateService.create(model);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (ArithmeticException | NotFoundException ex) {
             throw new OperationIsNotPossibleException(ex.getMessage());
         }
     }
@@ -120,7 +141,7 @@ public class ExpressionController {
             model.setResult(result);
             expressionCreateService.create(model);
             return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (ArithmeticException ex) {
+        } catch (ArithmeticException | NotFoundException ex) {
             throw new OperationIsNotPossibleException(ex.getMessage());
         }
     }
