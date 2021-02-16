@@ -37,6 +37,6 @@ public class ExpressionDtoConverter implements Converter<ExpressionDto, Expressi
     public ExpressionDto toDto(Expression model) {
         if (model == null) return null;
 
-        return new ExpressionDto(model.getId(), model.getValue(), model.getUser().getId());
+        return new ExpressionDto(model.getId(), model.getValue(), model.getResult(), model.getCreated(), model.getUser().getId());
     }
 }

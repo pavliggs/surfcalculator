@@ -1,6 +1,5 @@
 package com.khovaylo.surf.service;
 
-import com.khovaylo.surf.exception.NotFoundException;
 import com.khovaylo.surf.model.Expression;
 import com.khovaylo.surf.repository.ExpressionRepository;
 import lombok.AccessLevel;
@@ -10,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -31,10 +31,14 @@ public class SpecialServiceExpression {
     }
 
     public ZonedDateTime getZDT(String stringDateTime) {
-        String dateTimePattern = "dd.MM.yyyy HH:mm";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern);
-        LocalDateTime ldt = LocalDateTime.parse(stringDateTime, dateTimeFormatter);
-        return ZonedDateTime.of(ldt, ZoneId.systemDefault());
+        try {
+            String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern);
+            LocalDateTime ldt = LocalDateTime.parse(stringDateTime, dateTimeFormatter);
+            return ZonedDateTime.of(ldt, ZoneId.systemDefault());
+        } catch (Exception ex) {
+            throw new DateTimeException("Date format is no correct");
+        }
     }
 
     public List<Expression> getAllByCreatedBetweenTwoDates(ZonedDateTime start, ZonedDateTime finish) {
