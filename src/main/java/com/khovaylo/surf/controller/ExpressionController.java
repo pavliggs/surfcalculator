@@ -50,6 +50,10 @@ public class ExpressionController {
 
     GetService<Long, User> userGetService;
 
+    /**
+     * получить все выражения из СУБД
+     * @return список выражений
+     */
     @GetMapping("/list")
     public ResponseEntity<List<ExpressionDto>> getAll() {
         List<ExpressionDto> dtoList = expressionGetListService.getAll().stream()
@@ -57,6 +61,11 @@ public class ExpressionController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    /**
+     * получить список выражений по значению
+     * @param value значение выражения
+     * @return список выражений
+     */
     @PostMapping("/listbyvalue")
     public ResponseEntity<List<ExpressionDto>> getAllByValue(@NotNull @RequestBody String value) {
         List<ExpressionDto> dtoList = specialServiceExpression.getAllByValue(value).stream()
@@ -64,6 +73,11 @@ public class ExpressionController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    /**
+     * получить список выражений по временному периоду
+     * @param period объект, содержащий дату и время начала периода и дату и время конца периода
+     * @return список выражений
+     */
     @PostMapping("/listbycreatedbetweentwodates")
     public ResponseEntity<List<ExpressionDto>> getAllByCreatedBetweenTwoDates(@NotNull @Valid @RequestBody LookForBetweenTwoDatesDto period) {
         try {
@@ -77,6 +91,11 @@ public class ExpressionController {
         }
     }
 
+    /**
+     * получить список выражений по пользователю, который их создал
+     * @param user_id идентификатор пользователя
+     * @return список выражений
+     */
     @GetMapping("/{user_id}")
     public ResponseEntity<List<ExpressionDto>> getAllByUserId(@NotNull @PathVariable Long user_id) {
         List<ExpressionDto> dtoList = specialServiceExpression.getAllByUserId(user_id).stream()
@@ -84,6 +103,14 @@ public class ExpressionController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    /**
+     * получить результат сложения операндов и сохранить выражение со всеми параметрами (значение, результат,
+     * время создания, пользователь) в СУБД
+     * @param val1 первый операнд
+     * @param val2 второй операнд
+     * @param user_id идентификатор пользователя
+     * @return результат выражения
+     */
     @GetMapping("{user_id}/sum")
     public ResponseEntity<Double> sum(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
@@ -98,6 +125,14 @@ public class ExpressionController {
         }
     }
 
+    /**
+     * получить результат вычитания операндов и сохранить выражение со всеми параметрами (значение, результат,
+     * время создания, пользователь) в СУБД
+     * @param val1 первый операнд
+     * @param val2 второй операнд
+     * @param user_id идентификатор пользователя
+     * @return результат выражения
+     */
     @GetMapping("{user_id}/diff")
     public ResponseEntity<Double> diff(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
@@ -112,6 +147,14 @@ public class ExpressionController {
         }
     }
 
+    /**
+     * получить результат умножения операндов и сохранить выражение со всеми параметрами (значение, результат,
+     * время создания, пользователь) в СУБД
+     * @param val1 первый операнд
+     * @param val2 второй операнд
+     * @param user_id идентификатор пользователя
+     * @return результат выражения
+     */
     @GetMapping("{user_id}/mul")
     public ResponseEntity<Double> mul(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
@@ -126,6 +169,14 @@ public class ExpressionController {
         }
     }
 
+    /**
+     * получить результат деления операндов и сохранить выражение со всеми параметрами (значение, результат,
+     * время создания, пользователь) в СУБД
+     * @param val1 первый операнд
+     * @param val2 второй операнд
+     * @param user_id идентификатор пользователя
+     * @return результат выражения
+     */
     @GetMapping("{user_id}/div")
     public ResponseEntity<Double> div(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {
@@ -140,6 +191,12 @@ public class ExpressionController {
         }
     }
 
+    /**
+     * получить результат любого выражения со скобками и без скобок и сохранить выражение со всеми параметрами
+     * (значение, результат, время создания, пользователь) в СУБД
+     * @param dto объект выражения, содержащий параметры value и userId
+     * @return результат выражения
+     */
     @PostMapping("/calculate")
     public ResponseEntity<Double> expression(@NotNull @Valid @RequestBody ExpressionDto dto) {
         try {
