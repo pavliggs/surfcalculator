@@ -19,7 +19,7 @@ public interface ExpressionRepository extends JpaRepository<Expression, Long> {
 
     List<Expression> findAllByValue(String value);
 
-    @Query("SELECT u FROM Expression u WHERE u.user.id = :id")
+    @Query("SELECT u FROM Expression u WHERE u.user.id = :id order by u.created ASC")
     List<Expression> findByUserId(Long id);
 
     List<Expression> findByCreatedIsAfterAndCreatedIsBefore(ZonedDateTime start, ZonedDateTime finish);
