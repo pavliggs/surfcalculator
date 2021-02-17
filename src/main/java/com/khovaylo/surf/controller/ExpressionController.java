@@ -76,6 +76,7 @@ public class ExpressionController {
     /**
      * получить список выражений по временному периоду
      * @param period объект, содержащий дату и время начала периода и дату и время конца периода
+     * шаблон даты и времени должен быть в формате "yyyy-MM-dd HH:mm:ss"
      * @return список выражений
      */
     @PostMapping("/listbycreatedbetweentwodates")
