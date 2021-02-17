@@ -77,6 +77,13 @@ public class ExpressionController {
         }
     }
 
+    @GetMapping("/{user_id}")
+    public ResponseEntity<List<ExpressionDto>> getAllByUserId(@NotNull @PathVariable Long user_id) {
+        List<ExpressionDto> dtoList = specialServiceExpression.getAllByUserId(user_id).stream()
+                .map(expressionConverter::toDto).collect(Collectors.toList());
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
     @GetMapping("{user_id}/sum")
     public ResponseEntity<Double> sum(@NotNull @RequestParam Double val1, @NotNull @RequestParam Double val2, @NotNull @PathVariable Long user_id) {
         try {

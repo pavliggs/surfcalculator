@@ -1,6 +1,5 @@
 package com.khovaylo.surf.service.impl;
 
-import com.khovaylo.surf.exception.NotFoundException;
 import com.khovaylo.surf.model.Expression;
 import com.khovaylo.surf.repository.ExpressionRepository;
 import com.khovaylo.surf.service.CreateService;

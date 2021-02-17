@@ -1,6 +1,7 @@
 package com.khovaylo.surf.service;
 
 import com.khovaylo.surf.model.Expression;
+import com.khovaylo.surf.model.User;
 import com.khovaylo.surf.repository.ExpressionRepository;
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -26,6 +27,8 @@ public class SpecialServiceExpression {
 
     ExpressionRepository expressionRepository;
 
+    GetService<Long, User> userGetService;
+
     public List<Expression> getAllByValue(String value) {
         return expressionRepository.findAllByValue(value);
     }
@@ -43,5 +46,10 @@ public class SpecialServiceExpression {
 
     public List<Expression> getAllByCreatedBetweenTwoDates(ZonedDateTime start, ZonedDateTime finish) {
         return expressionRepository.findByCreatedIsAfterAndCreatedIsBefore(start, finish);
+    }
+
+    public List<Expression> getAllByUserId(Long user_id) {
+        userGetService.get(user_id);
+        return expressionRepository.findByUserId(user_id);
     }
 }

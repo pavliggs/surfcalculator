@@ -197,13 +197,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      *                предоставляя им доступ к общим метаданным запроса, а не для фактической обработки запроса.
      * @return тело ошибки
      */
-//    @ExceptionHandler({Exception.class})
-//    protected ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
-//        ApiError apiError = new ApiError(
-//                LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred"
-//        );
-//        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
-//    }
+    @ExceptionHandler({Exception.class})
+    protected ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred"
+        );
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
 
     /* Custom handlers */
 
@@ -220,20 +220,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(errors, errors.getStatus());
     }
-
-    /**
-     * Метод обработки исключения BadRequestException
-     *
-     * @param ex исключение BadRequestException
-     * @return сообщение об ошибке
-     */
-//    @ExceptionHandler(BadRequestException.class)
-//    protected ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
-//        ApiError errors = new ApiError(
-//                LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex.getLocalizedMessage()
-//        );
-//        return new ResponseEntity<>(errors, errors.getStatus());
-//    }
 
     /**
      * Метод обработки исключения OperationIsNotPossibleException
